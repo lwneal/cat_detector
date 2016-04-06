@@ -105,9 +105,9 @@ def main(filename):
 
 def is_it_a_cat(index):
     if index in range(281, 294):
-        return 'Yes, this is a cat! It is a {}'.format(classes[index])
+        return 'Yes, that is a cat! It is a {}'.format(classes[index])
     else:
-        return 'No, this is not a cat. It is a {}'.format(classes[index])
+        return 'No, that is not a cat. It is a {}'.format(classes[index])
 
 classes = """tench, Tinca tinca
 goldfish, Carassius auratus

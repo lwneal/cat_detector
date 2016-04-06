@@ -3,13 +3,15 @@
     <head>
         <meta charset=utf-8>
         <meta name="viewport" content="width=620">
-        <title>HTML5 Demo: Drag and drop, automatic upload</title>
+        <title>Online Cat Detector</title>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <section id="wrapper">
             <header>
-                <h1>Drag and drop, automatic upload</h1>
+                <center>
+                    <h1>Is It A Cat?</h1>
+                </center>
             </header>
 
             <style>
@@ -31,9 +33,9 @@ progress:after { content: '%'; }
                 <p id="formdata">XHR2's FormData is not supported</p>
                 <p id="progress">XHR2's upload progress isn't supported</p>
                 <div id="cat_detector_response">
-                    Waiting for upload...
+                    Drag and drop an image...
                 </div>
-                <div>
+                <div hidden=true>
                     <p>
                     Upload progress: <progress id="uploadprogress" min="0" max="100" value="0">0</progress>
                     </p>
@@ -70,6 +72,11 @@ var holder = document.getElementById('holder'),
     fileupload = document.getElementById('upload'),
     detectorResponse = document.getElementById('cat_detector_response');
 
+function reset() {
+    holder.innerHTML = '';
+    detectorResponse.innerHTML = '<img src="loading.gif" alt="Loading..."></img>';
+}
+
 "filereader formdata progress".split(' ').forEach(function (api) {
     if (tests[api] === false) {
         support[api].className = 'fail';
@@ -88,9 +95,9 @@ function previewfile(file) {
         reader.onload = function (event) {
             var image = new Image();
             image.src = event.target.result;
-            image.width = 250; // a fake resize
-            // Clear the current image
-            holder.innerHTML = '';
+            image.width = 256; // a fake resize
+
+            reset();
             holder.appendChild(image);
         };
 
@@ -101,7 +108,10 @@ function previewfile(file) {
     }
 }
 
-var foo;
+function displayError() {
+    detectorResponse.innerHTML = 'Error processing this file';
+}
+
 function readfiles(files) {
     var formData = tests.formdata ? new FormData() : null;
     for (var i = 0; i < files.length; i++) {
@@ -114,9 +124,16 @@ function readfiles(files) {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/cat_picture');
         xhr.onload = function() {
+            console.log(xhr);
+            if (xhr.status != 200) {
+                displayError();
+            }
             var response = JSON.parse(xhr.responseText);
             detectorResponse.innerHTML = response.message;
             progress.value = progress.innerHTML = 100;
+        };
+        xhr.onerror = function(event) {
+            displayError();
         };
 
         if (tests.progress) {
