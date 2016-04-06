@@ -1,9 +1,12 @@
+import os
+import cPickle
 from keras.models import Sequential
 from keras.layers.core import Flatten, Dense, Dropout
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.optimizers import SGD
 import cv2, numpy as np
 import sys
+
 
 def VGG_16(weights_path=None):
     model = Sequential()
@@ -56,28 +59,55 @@ def VGG_16(weights_path=None):
     return model
 
 
-def classify(im):
-    # Test pretrained model
-    model = VGG_16('vgg16_weights.h5')
+def load_cached_model(filename='imagenet.pkl'):
+    if os.path.isfile(filename):
+        with open(filename) as fp:
+            return cPickle.load(fp)
+    return None
+
+
+def cache_model(model, filename='imagenet.pkl'):
+    with open(filename, 'w') as fp:
+        cPickle.dump(model, fp)
+
+
+def compile_model(weights_filename='vgg16_weights.h5'):
+    model = VGG_16(weights_filename)
     sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer=sgd, loss='categorical_crossentropy')
+    return model
+
+
+model = None
+def classify(im):
+    global model
+    if model is None:
+        model = compile_model()
     out = model.predict(im)
     return np.argmax(out)
 
 
-def main(filename):
+def convert_image(filename):
+    print("Converting image with filename {}".format(filename))
     im = cv2.resize(cv2.imread(filename), (224, 224)).astype(np.float32)
     im[:,:,0] -= 103.939
     im[:,:,1] -= 116.779
     im[:,:,2] -= 123.68
     im = im.transpose((2,0,1))
     im = np.expand_dims(im, axis=0)
+    return im
+
+
+def main(filename):
+    im = convert_image(filename)
     index = classify(im)
-    print index
+    print(is_it_a_cat(index))
+
+def is_it_a_cat(index):
     if index in range(281, 294):
-        print('Yes, this is a cat! It is a {}'.format(classes[index]))
+        return 'Yes, this is a cat! It is a {}'.format(classes[index])
     else:
-        print('No, this is not a cat. It is a {}'.format(classes[index]))
+        return 'No, this is not a cat. It is a {}'.format(classes[index])
 
 classes = """tench, Tinca tinca
 goldfish, Carassius auratus
