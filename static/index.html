@@ -28,7 +28,9 @@ progress:after { content: '%'; }
             <article>
                 <div id="holder">
                 </div> 
-                <p id="upload" class="hidden"><label>Drag &amp; drop not supported, but you can still upload via this input field:<br><input type="file"></label></p>
+                <p id="upload">
+                    <label>Drag &amp; drop not supported, but you can still upload via this input field:<br><input type="file"></label>
+                </p>
                 <p id="filereader">File API &amp; FileReader API not supported</p>
                 <p id="formdata">XHR2's FormData is not supported</p>
                 <p id="progress">XHR2's upload progress isn't supported</p>
@@ -44,13 +46,17 @@ progress:after { content: '%'; }
             <br>
             <br>
             <footer>
-                <div>
-                    Thanks to <a href="http://html5demos.com/dnd-upload">html5demos.com</a>
-                </div>
+                <center>
+                    <a href="http://eecs.oregonstate.edu/"><img src="osu.jpg"></img></a>
+                </center>
             </footer>
         </section>
 
         <script>
+console.log("Built using Keras, by the incomparable François Chollet https://github.com/fchollet");
+console.log("UI based on an excellent demo by the folks at http://html5demos.com/dnd-upload");
+console.log("Imagenet Model by Simonyan et al:\nVery Deep Convolutional Networks for Large-Scale Image Recognition\nK. Simonyan, A. Zisserman\n arXiv:1409.1556");
+
 var holder = document.getElementById('holder'),
     tests = {
         filereader: typeof FileReader != 'undefined',
