@@ -6,4 +6,6 @@ Looking for an easy way to tell whether that unidentified object in the room is 
 
 Look no further, this repository contains an easy-to-use automatic cat detector.
 
+![Screenshot](screenshot.png)
+
 Powers the site [isitacat.com](http://isitacat.com)
