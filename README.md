@@ -8,4 +8,6 @@ Look no further, this repository contains an easy-to-use automatic cat detector.
 
 ![Screenshot](screenshot.png)
 
-Powers the site [isitacat.com](http://isitacat.com)
+Don't settle for other [cheap imitation cat-detector websites](https://isthisacat.com).
+Demand the original cheap imitation: [isitacat.com](https://isitacat.com)
+
